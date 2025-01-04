@@ -23,3 +23,9 @@ func (repo *PostgresUserRepo) Create(ctx context.Context, user *model.User) (mod
 	}
 	return u, err
 }
+
+func (repo *PostgresUserRepo) GetByUsername(ctx context.Context, username string) (model.User, error) {
+	u := model.User{}
+	err := repo.db.QueryRowContext(ctx, "SELECT username, name, role FROM appuser WHERE username=$1", username).Scan(&u.Username, &u.Name, &u.Role)
+	return u, err
+}

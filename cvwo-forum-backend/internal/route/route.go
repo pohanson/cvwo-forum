@@ -7,4 +7,5 @@ import (
 
 func All(r chi.Router) {
 	r.Post("/user", handler.CreateUserHandler)
+	r.Post("/login", handler.LoginUserHandler)
 }
