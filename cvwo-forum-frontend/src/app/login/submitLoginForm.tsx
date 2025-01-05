@@ -1,6 +1,8 @@
 "use server";
 import { z } from "zod";
 import { APP_CONFIG } from "../config";
+import writeSetCookies from "@/lib/writeSetCookie";
+import { cookies } from "next/headers";
 
 export async function submitLoginForm(
   formState: SigninFormState,
@@ -18,6 +20,7 @@ export async function submitLoginForm(
   if (r.status != 200) {
     return { success: false };
   } else {
+    writeSetCookies(r, await cookies());
     return { success: true };
   }
 }

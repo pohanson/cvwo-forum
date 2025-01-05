@@ -1,6 +1,7 @@
 package model
 
 import (
+	"encoding/gob"
 	"encoding/json"
 	"errors"
 	"io"
@@ -8,6 +9,10 @@ import (
 
 	"github.com/pohanson/cvwo-forum/internal/utils"
 )
+
+func init() {
+	gob.Register(User{})
+}
 
 type User struct {
 	Username string `json:"username"`

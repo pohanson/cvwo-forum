@@ -2,6 +2,8 @@
 
 import { z } from "zod";
 import { APP_CONFIG } from "../config";
+import { cookies } from "next/headers";
+import writeSetCookies from "@/lib/writeSetCookie";
 
 export async function submitSignupform(
   formState: SignupFormState,
@@ -48,6 +50,7 @@ export async function submitSignupform(
       payload: parsedFormData,
     };
   } else {
+    writeSetCookies(r, await cookies());
     return { success: true, message: await r.text() };
   }
 }

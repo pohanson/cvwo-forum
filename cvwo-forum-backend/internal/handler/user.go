@@ -9,6 +9,7 @@ import (
 
 	"github.com/pohanson/cvwo-forum/internal/model"
 	"github.com/pohanson/cvwo-forum/internal/repository"
+	"github.com/pohanson/cvwo-forum/internal/usersession"
 )
 
 func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
@@ -32,8 +33,11 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("Error converting json result: ", err)
 		http.Error(w, "Unknown Error", http.StatusBadRequest)
+		return
 	}
+	usersession.PutSesUser(r, result)
 	w.Write(jsonResult)
+	w.WriteHeader(200)
 }
 
 func writeDecodingError(err error, w http.ResponseWriter) {

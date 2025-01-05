@@ -8,6 +8,7 @@ import (
 	"github.com/pohanson/cvwo-forum/internal/database"
 	"github.com/pohanson/cvwo-forum/internal/route"
 	"github.com/pohanson/cvwo-forum/internal/router"
+	"github.com/pohanson/cvwo-forum/internal/usersession"
 )
 
 func main() {
@@ -22,5 +23,5 @@ func main() {
 	r := router.Setup()
 	route.All(r)
 	log.Println("Started server on port 5000 at http://localhost:5000")
-	log.Fatalln(http.ListenAndServe("localhost:5000", r))
+	log.Fatalln(http.ListenAndServe("localhost:5000", usersession.GetSession().Enable(r)))
 }

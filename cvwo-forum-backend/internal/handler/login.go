@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/pohanson/cvwo-forum/internal/repository"
+	"github.com/pohanson/cvwo-forum/internal/usersession"
 )
 
 type loginFormData struct {
@@ -36,5 +37,7 @@ func LoginUserHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println("Error converting json result:", err)
 		http.Error(w, "Unknown Error", http.StatusBadRequest)
 	}
+	usersession.PutSesUser(r, result)
 	w.Write(jsonResult)
+	w.WriteHeader(200)
 }
