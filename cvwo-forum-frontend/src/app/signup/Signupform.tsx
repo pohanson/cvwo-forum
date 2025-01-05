@@ -2,8 +2,9 @@
 import TextInput from "@/components/TextInput";
 import { useActionState, useEffect } from "react";
 import { submitSignupform } from "./submitSignupform";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import OutlinedButton from "@/components/OutlinedButton";
 
 export function SignupForm() {
   const [state, action, pending] = useActionState(submitSignupform, null);
@@ -36,13 +37,17 @@ export function SignupForm() {
         label="Name"
         defaultValue={state?.success ? "" : state?.payload.name}
       />
-      <button
-        type="submit"
-        disabled={pending}
-        className="py-2 mt-4 border border-blue-500 rounded-lg hover:bg-blue-200 disabled:bg-gray-400"
-      >
+      <OutlinedButton type="submit" disabled={pending}>
         {pending ? "Signing Up ..." : "Sign Up"}
-      </button>
+      </OutlinedButton>
+      <hr className="w-full border-black mt-6" />
+      <OutlinedButton
+        type="button"
+        disabled={pending}
+        onClick={() => redirect("/login")}
+      >
+        Go To Login
+      </OutlinedButton>
     </form>
   );
 }

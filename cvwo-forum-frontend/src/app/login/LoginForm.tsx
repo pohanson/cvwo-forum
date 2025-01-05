@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { useActionState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { submitLoginForm } from "./submitLoginForm";
+import OutlinedButton from "@/components/OutlinedButton";
 
 export function LoginForm() {
   const [state, action, pending] = useActionState(submitLoginForm, null);
@@ -20,13 +21,17 @@ export function LoginForm() {
   return (
     <form action={action} className="flex flex-col">
       <TextInput id="username" label="Username" />
-      <button
-        type="submit"
-        disabled={pending}
-        className="py-2 mt-4 border border-blue-500 rounded-lg hover:bg-blue-200 disabled:bg-gray-400"
-      >
+      <OutlinedButton type="submit" disabled={pending}>
         {pending ? "Logging In ..." : "Login"}
-      </button>
+      </OutlinedButton>
+      <hr className="w-full border-black mt-6" />
+      <OutlinedButton
+        type="button"
+        disabled={pending}
+        onClick={() => redirect("/signup")}
+      >
+        Go To Signup
+      </OutlinedButton>
     </form>
   );
 }
