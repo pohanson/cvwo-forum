@@ -2,8 +2,6 @@ package handler
 
 import (
 	"encoding/json"
-	"errors"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -15,10 +13,14 @@ import (
 func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	user := model.User{}
-	err := user.DecodeFromJson(r.Body)
-	if err != nil {
+	if err := user.DecodeFromJson(r.Body); err != nil {
 		log.Println(err)
 		writeDecodingError(err, w)
+		return
+	}
+	if err := user.ValidateAll(); err != nil {
+		log.Println(err)
+		writeValidationError(err, w)
 		return
 	}
 	user.Role = 1
@@ -38,32 +40,4 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 	usersession.PutSesUser(r, result)
 	w.Write(jsonResult)
 	w.WriteHeader(200)
-}
-
-func writeDecodingError(err error, w http.ResponseWriter) {
-	if err != nil {
-		var maxLengthError *model.MaxLengthViolationErr
-		var missingFieldError *model.MissingFieldErr
-		var syntaxError *json.SyntaxError
-		switch {
-		case errors.As(err, &maxLengthError):
-			fallthrough
-		case errors.As(err, &missingFieldError):
-			http.Error(w, err.Error(), http.StatusBadRequest)
-		case errors.As(err, &syntaxError):
-			http.Error(w, fmt.Sprint("Error decoding json: ", err.Error()), http.StatusBadRequest)
-		default:
-			http.Error(w, "Error decoding json", http.StatusBadRequest)
-		}
-	}
-}
-
-func writeDbInsertError(err error, w http.ResponseWriter) {
-	var uniqueViolationErr *repository.UniqueViolationErr
-	switch {
-	case errors.As(err, &uniqueViolationErr):
-		http.Error(w, err.Error(), http.StatusBadRequest)
-	default:
-		http.Error(w, "Unknown Error", http.StatusBadRequest)
-	}
 }

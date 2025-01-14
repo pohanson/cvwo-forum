@@ -13,4 +13,6 @@ func All(r chi.Router) {
 	r.Post("/login", handler.LoginUserHandler)
 	r.Get("/logout", func(w http.ResponseWriter, r *http.Request) { usersession.RemoveSesUser(r); return })
 	r.Get("/verifyUser", handler.VerifyUserHandler)
+	r.Post("/post", handler.CreatePostHandler)
+	r.Get("/category", handler.GetAllCategoryHandler)
 }

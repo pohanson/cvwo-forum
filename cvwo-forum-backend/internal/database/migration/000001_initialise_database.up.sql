@@ -23,7 +23,7 @@ INSERT INTO
 	"thread_type"
 VALUES
 	(1, 'Question'), 
-	(2, 'Blog'), 
+	(2, 'Post'), 
 	(3, 'Reply');
 
 CREATE TABLE "thread" (
